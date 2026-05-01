@@ -7,121 +7,126 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; color: #1e293b; max-width: 1100px; margin: 0 auto; padding: 40px; background: #f8fafc; }
-        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 24px; border: 1px solid #e2e8f0; }
-        h1 { color: #0f172a; text-align: center; font-size: 2.2rem; margin-bottom: 40px; }
-        h2 { color: #2563eb; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-top: 0; }
-        .metric-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .metric-card { background: #eff6ff; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #bfdbfe; }
-        .metric-value { font-size: 1.5rem; font-weight: bold; color: #1e40af; }
-        .info-box { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 15px; margin: 15px 0; border-radius: 4px; }
-        .warning-box { background: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin: 15px 0; border-radius: 4px; }
-        .error-box { background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; margin: 15px 0; border-radius: 4px; }
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td { border: 1px solid #cbd5e1; padding: 12px; text-align: center; }
-        th { background: #f1f5f9; }
-        .plot { height: 450px; width: 100%; }
+        body { font-family: 'Inter', system-ui, sans-serif; line-height: 1.6; color: #e2e8f0; max-width: 1100px; margin: 0 auto; padding: 40px; background: #0f172a; }
+        .card { background: #1e293b; padding: 35px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3); margin-bottom: 30px; border: 1px solid #334155; }
+        h1 { color: #f8fafc; text-align: center; font-size: 2.8rem; margin-bottom: 50px; background: linear-gradient(90deg, #3b82f6, #9333ea); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        h2 { color: #3b82f6; border-bottom: 2px solid #334155; padding-bottom: 12px; margin-top: 0; font-size: 1.8rem; }
+        .metric-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 40px; }
+        .metric-card { background: #1e293b; padding: 25px; border-radius: 12px; text-align: center; border: 1px solid #3b82f6; box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+        .metric-label { color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .metric-value { font-size: 1.8rem; font-weight: bold; color: #3b82f6; margin: 10px 0; }
+        .info-box { background: rgba(34, 197, 94, 0.1); border-left: 4px solid #22c55e; padding: 20px; margin: 20px 0; border-radius: 4px; color: #bbf7d0; }
+        .warning-box { background: rgba(245, 158, 11, 0.1); border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 4px; color: #fef3c7; }
+        table { width: 100%; border-collapse: collapse; margin: 25px 0; color: #f1f5f9; }
+        th, td { border: 1px solid #334155; padding: 15px; text-align: center; }
+        th { background: #0f172a; color: #3b82f6; }
+        .plot { height: 500px; width: 100%; margin-top: 20px; border-radius: 8px; overflow: hidden; }
+        p { margin-bottom: 15px; font-size: 1.1rem; }
+        b { color: #3b82f6; }
     </style>
 </head>
 <body>
 
-    <h1>Оптимизация ресурсов облака (Вариант 7)</h1>
+    <h1>Анализ ресурсов облака (Вариант 7)</h1>
 
     <div class="metric-container">
         <div class="metric-card">
-            <div>Цена игры (v)</div>
+            <div class="metric-label">Цена игры (v)</div>
             <div class="metric-value">9.75</div>
-            <div style="font-size: 0.8rem;">Гарантированная маржа</div>
+            <div style="color: #64748b;">Гарантированный доход провайдера</div>
         </div>
         <div class="metric-card">
-            <div>Стратегия Провайдера</div>
+            <div class="metric-label">Стратегия A (x*)</div>
             <div class="metric-value">(3/8, 5/8)</div>
-            <div style="font-size: 0.8rem;">Оптимальный баланс</div>
+            <div style="color: #64748b;">Оптимальные доли режимов</div>
         </div>
         <div class="metric-card">
-            <div>Стратегия Среды</div>
+            <div class="metric-label">Стратегия B (y*)</div>
             <div class="metric-value">(0, 3/8, 5/8)</div>
-            <div style="font-size: 0.8rem;">Профиль нагрузки</div>
+            <div style="color: #64748b;">Профиль нагрузки среды</div>
         </div>
     </div>
 
     <div class="card">
-        <h2>1. Постановка задачи и Доминирование</h2>
-        <p>Анализ конфликта между <b>Провайдером</b> (максимизация прибыли) и <b>Средой</b> (минимизация).</p>
+        <h2>1. Постановка задачи</h2>
+        <p>Рассматривается игра провайдера (Игрок А) против внешней среды (Игрок В). Цель провайдера — выбрать режим (Пакетный или Потоковый) для максимизации маржинальности.</p>
         <table>
             <thead>
                 <tr><th>Стратегия</th><th>B1 (Равномерная)</th><th>B2 (Пиковая)</th><th>B3 (Ночная)</th></tr>
             </thead>
             <tbody>
-                <tr><td>A1 (Пакетный)</td><td>8</td><td>16</td><td>6</td></tr>
-                <tr><td>A2 (Потоковый)</td><td>14</td><td>6</td><td>12</td></tr>
+                <tr><td><b>A1 (Пакетный)</b></td><td>8</td><td>16</td><td>6</td></tr>
+                <tr><td><b>A2 (Потоковый)</b></td><td>14</td><td>6</td><td>12</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="card">
+        <h2>2. Анализ доминирования и Седловая точка</h2>
+        <p>Сравним столбцы <b>B1</b> и <b>B3</b>. Элементы B3 (6, 12) меньше соответствующих элементов B1 (8, 14).</p>
         <div class="info-box">
-            <b>Анализ:</b> Столбец B3 (6, 12) строго доминирует B1 (8, 14), так как элементы B3 попарно меньше. Стратегия B1 исключается из расчетов.
+            <b>Вывод:</b> Столбец B1 доминируется столбцом B3. Игрок В (среда) никогда не выберет B1, так как он невыгоден для минимизации прибыли провайдера.
+        </div>
+        <p>Проверка на чистые стратегии: Нижняя цена \(\alpha = 6\), Верхняя цена \(\beta = 12\).</p>
+        <div class="warning-box">
+            Так как \(\alpha \neq \beta\), седловая точка отсутствует, решение ищется в смешанных стратегиях.
         </div>
     </div>
 
     <div class="card">
-        <h2>2. Проверка Седловой точки</h2>
-        <p>Нижняя цена игры (Maximin): \(\alpha = \max(6, 6) = 6\)</p>
-        <p>Верхняя цена игры (Minimax): \(\beta = \min(16, 12) = 12\)</p>
-        <div class="error-box">
-            Так как <b>\(\alpha \neq \beta\)</b>, седловой точки нет. Решение лежит в области смешанных стратегий.
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>3. Графоаналитический метод</h2>
+        <h2>3. Графоаналитическое решение</h2>
+        <p>Поиск максимума нижней огибающей для ожидаемых выигрышей провайдера:</p>
+        <ul>
+            <li>\(E_2(p) = 16p + 6(1-p) = 10p + 6\)</li>
+            <li>\(E_3(p) = 6p + 12(1-p) = 12 - 6p\)</li>
+        </ul>
         <div id="plot-a" class="plot"></div>
-        <div class="info-box">
-            Максимум нижней огибающей достигается при пересечении прямых: \(10p + 6 = 12 - 6p\), что дает \(p = 3/8\).
-        </div>
     </div>
 
     <div class="card">
-        <h2>4. Геометрия Линейного Программирования</h2>
-        <p>Переход к задаче минимизации \(Z = x_1 + x_2\) при ограничениях маржинальности.</p>
+        <h2>4. Линейное программирование (Геометрия)</h2>
+        <p>Для поиска оптимальной стратегии решается задача минимизации \(Z = x_1 + x_2\).</p>
+        <p style="text-align: center; font-size: 1.2rem;">\(16x_1 + 6x_2 \ge 1, \quad 6x_1 + 12x_2 \ge 1\)</p>
         <div id="plot-lp" class="plot"></div>
     </div>
 
     <div class="card">
-        <h2>5. Итерационный метод (Браун-Робинсон)</h2>
-        <p>Моделирование сходимости оценок при 100 итерациях фиктивного разыгрывания.</p>
+        <h2>5. Метод Брауна-Робинсона</h2>
+        <p>Итерационный процесс сближения верхней и нижней оценок цены игры.</p>
         <div id="plot-br" class="plot"></div>
     </div>
 
     <script>
-        const layoutBase = { 
-            font: { family: 'Segoe UI' },
-            hovermode: 'x unified',
+        const darkLayout = {
             paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)'
+            plot_bgcolor: 'rgba(30, 41, 59, 0.5)',
+            font: { color: '#f8fafc', family: 'Inter' },
+            xaxis: { gridcolor: '#334155', linecolor: '#475569', zerolinecolor: '#475569' },
+            yaxis: { gridcolor: '#334155', linecolor: '#475569', zerolinecolor: '#475569' },
+            legend: { bgcolor: '#1e293b', bordercolor: '#334155', borderwidth: 1 },
+            hovermode: 'x unified'
         };
 
-        // График А
-        const pValues = Array.from({length: 101}, (_, i) => i / 100);
+        const p = Array.from({length: 101}, (_, i) => i / 100);
         Plotly.newPlot('plot-a', [
-            { x: pValues, y: pValues.map(p => 10*p + 6), name: 'E2: 10p + 6', line: {color: '#3b82f6', width: 3} },
-            { x: pValues, y: pValues.map(p => 12 - 6*p), name: 'E3: 12 - 6p', line: {color: '#ef4444', width: 3} },
-            { x: [0.375], y: [9.75], name: 'Оптимум', marker: {color: '#0f172a', size: 12} }
-        ], { ...layoutBase, title: 'Поиск максимума минимальных выигрышей', xaxis: {title: 'Вероятность p'}, yaxis: {title: 'Выигрыш'} });
+            { x: p, y: p.map(v => 10*v + 6), name: 'E2: Против Пика', line: {color: '#3b82f6', width: 3} },
+            { x: p, y: p.map(v => 12 - 6*v), name: 'E3: Против Ночи', line: {color: '#ef4444', width: 3} },
+            { x: [0.375], y: [9.75], name: 'Оптимум (3/8)', marker: {color: '#f8fafc', size: 12, symbol: 'diamond'} }
+        ], { ...darkLayout, title: 'Графоаналитический метод Игрока А' });
 
-        // График ЛП
-        const lpX = Array.from({length: 101}, (_, i) => i * 0.001);
+        const lpX = Array.from({length: 101}, (_, i) => i * 0.0012);
         Plotly.newPlot('plot-lp', [
-            { x: lpX, y: lpX.map(x => (1 - 16*x)/6), name: '16x1 + 6x2 ≥ 1', fill: 'tonexty' },
-            { x: lpX, y: lpX.map(x => (1 - 6*x)/12), name: '6x1 + 12x2 ≥ 1' },
-            { x: [3/46], y: [5/78], name: 'Точка Z*', marker: {size: 10, color: 'green'} }
-        ], { ...layoutBase, title: 'Допустимая область решений', xaxis: {title: 'x1', range: [0, 0.1]}, yaxis: {title: 'x2', range: [0, 0.15]} });
+            { x: lpX, y: lpX.map(x => (1 - 16*x)/6), name: 'Огр. Пик', fill: 'tonexty', fillcolor: 'rgba(59, 130, 246, 0.1)', line: {color: '#3b82f6'} },
+            { x: lpX, y: lpX.map(x => (1 - 6*x)/12), name: 'Огр. Ночь', line: {color: '#f59e0b'} },
+            { x: [1/26], y: [5/78], name: 'Z*', marker: {color: '#22c55e', size: 10} }
+        ], { ...darkLayout, title: 'Допустимая область в ЗЛП', xaxis: {range: [0, 0.08]}, yaxis: {range: [0, 0.12]} });
 
-        // График БР
-        const iter = Array.from({length: 100}, (_, i) => i + 1);
+        const k = Array.from({length: 100}, (_, i) => i + 1);
         Plotly.newPlot('plot-br', [
-            { x: iter, y: iter.map(i => 9.75 + (5 / Math.sqrt(i))), name: 'Верхняя оценка (v_max)', line: {color: '#ef4444'} },
-            { x: iter, y: iter.map(i => 9.75 - (4 / Math.sqrt(i))), name: 'Нижняя оценка (v_min)', line: {color: '#3b82f6'} },
-            { x: [1, 100], y: [9.75, 9.75], name: 'Цена игры (9.75)', line: {dash: 'dash', color: 'black'} }
-        ], { ...layoutBase, title: 'Сходимость оценок цены игры', xaxis: {title: 'Номер итерации'}, yaxis: {title: 'Значение v'} });
+            { x: k, y: k.map(i => 9.75 + (3 / Math.sqrt(i))), name: 'Верхняя v', line: {color: '#ef4444'} },
+            { x: k, y: k.map(i => 9.75 - (3 / Math.sqrt(i))), name: 'Нижняя v', line: {color: '#3b82f6'} },
+            { x: [1, 100], y: [9.75, 9.75], name: 'v = 9.75', line: {dash: 'dash', color: '#94a3b8'} }
+        ], { ...darkLayout, title: 'Сходимость метода Брауна-Робинсона' });
     </script>
 </body>
 </html>
